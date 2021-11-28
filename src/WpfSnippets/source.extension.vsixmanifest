@@ -10,12 +10,7 @@
         <Tags>WPF, snippet, command, property, async</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Version="[16.0,18.0)" Id="Microsoft.VisualStudio.Community">
-            <ProductArchitecture>x86</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Version="[16.0,18.0)" Id="Microsoft.VisualStudio.Community">
-            <ProductArchitecture>amd64</ProductArchitecture>
-        </InstallationTarget>
+        <InstallationTarget Version="[16.0,18.0)" Id="Microsoft.VisualStudio.Community" />
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -24,6 +19,6 @@
         <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="File" Path="Snippets\Snippets.pkgdef" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,17.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,18.0)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>
