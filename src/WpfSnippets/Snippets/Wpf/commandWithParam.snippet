@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Async command with parameter</Title>
+      <Shortcut>cmdo</Shortcut>
+      <Description>Inserts ICommand with associated private method and parameter.</Description>
+      <Author>Niklas Hempel</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+
+    <Snippet>
+      <Declarations>
+        <Literal>
+          <ID>MethodName</ID>
+          <ToolTip>The name of the public command and its method.</ToolTip>
+          <Default>Method</Default>
+        </Literal>
+        <Literal>
+          <ID>fieldName</ID>
+          <ToolTip>The name of the field backing this command.</ToolTip>
+          <Default>field</Default>
+        </Literal>
+        <Literal>
+          <ID>type</ID>
+          <ToolTip>The type of the command parameter.</ToolTip>
+          <Default>object</Default>
+        </Literal>
+      </Declarations>
+      <Code Language="csharp">
+        <![CDATA[private RelayCommand<$type$> $fieldName$Command;
+        
+        public RelayCommand<$type$> $MethodName$Command
+        {
+          get
+          {
+            return $fieldName$Command ??= new RelayCommand<$type$>(param => this.$MethodName$(param));
+          }
+        }
+
+	private void $MethodName$($type$ param)
+	{
+		
+	}
+	$end$]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

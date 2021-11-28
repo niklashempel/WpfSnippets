@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Command classes</Title>
+      <Shortcut>relay</Shortcut>
+      <Description>Inserts all necessary sync and async command classes.</Description>
+      <Author>Niklas Hempel</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System</Namespace>
+        </Import>
+        <Import>
+          <Namespace>System.Threading.Tasks</Namespace>
+        </Import>
+        <Import>
+          <Namespace>System.Windows.Input</Namespace>
+        </Import>
+      </Imports>
+      <Code Language="csharp">
+        <![CDATA[
+	public class RelayCommand : ICommand
+	{
+		private readonly Predicate<object> canExecute;
+		
+		private readonly Action<object> execute;
+		
+		private event EventHandler CanExecuteChangedInternal;
+		
+		public event EventHandler CanExecuteChanged
+		{
+			add
+			{
+				CommandManager.RequerySuggested += value;
+				CanExecuteChangedInternal += value;
+			}
+			remove
+			{
+				CommandManager.RequerySuggested -= value;
+				CanExecuteChangedInternal -= value;
+			}
+		}
+		
+		public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+		{
+			this.execute = execute ?? throw new NullReferenceException(nameof(execute));
+			this.canExecute = canExecute;
+		}
+
+		public RelayCommand(Action<object> execute)
+			: this(execute, null)
+		{
+		}
+		
+		public bool CanExecute(object parameter)
+		{
+			return canExecute == null || canExecute(parameter);
+		}
+		
+		public void Execute(object parameter)
+		{
+			execute(parameter);
+		}
+		
+		public void RaiseCanExecuteChanged()
+		{
+			CanExecuteChangedInternal.Raise(this);
+		}
+	}
+  
+	public class RelayCommand<T> : ICommand
+	{
+		private readonly Predicate<T> canExecute;
+
+		private readonly Action<T> execute;
+
+		public RelayCommand(Action<T> execute)
+				   : this(execute, null)
+		{
+			this.execute = execute;
+		}
+
+		public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+		{
+			this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
+			this.canExecute = canExecute;
+		}
+
+		public event EventHandler CanExecuteChanged
+		{
+			add { CommandManager.RequerySuggested += value; }
+			remove { CommandManager.RequerySuggested -= value; }
+		}
+
+		public bool CanExecute(object parameter)
+		{
+			return canExecute == null || canExecute((T)parameter);
+		}
+
+		public void Execute(object parameter)
+		{
+			execute((T)parameter);
+		}
+	}
+	
+	public class EventArgs<T> : EventArgs
+	{
+		public EventArgs(T value)
+		{
+			Value = value;
+		}
+
+		public T Value { get; private set; }
+	}
+	
+	public static class EventHandlerExtensions
+  {
+      public static void Raise(this EventHandler handler, object sender)
+      {
+          handler?.Invoke(sender, EventArgs.Empty);
+      }
+
+      public static void Raise<T>(this EventHandler<EventArgs<T>> handler, object sender, T value)
+      {
+          handler?.Invoke(sender, new EventArgs<T>(value));
+      }
+
+      public static void Raise<T>(this EventHandler<T> handler, object sender, T value) where T : EventArgs
+      {
+          handler?.Invoke(sender, value);
+      }
+
+      public static void Raise<T>(this EventHandler<EventArgs<T>> handler, object sender, EventArgs<T> value)
+      {
+          handler?.Invoke(sender, value);
+      }
+  }
+	
+	public interface IErrorHandler
+  {
+      void HandleError(Exception ex);
+  }
+	
+	public class ErrorHandler : IErrorHandler
+  {
+      public static IErrorHandler Create()
+      {
+          return new ErrorHandler();
+      }
+
+      public void HandleError(Exception ex)
+      {
+          // Handle the error here. For example with a message box.
+      }
+  }
+	
+	public static class TaskExtensions
+  {
+      public static async void FireAndForgetSafety(this Task task, IErrorHandler handler)
+      {
+          try
+          {
+              await task;
+          }
+          catch (Exception ex)
+          {
+              handler.HandleError(ex);
+          }
+      }
+  }
+	
+	public interface IAsyncCommand : ICommand
+  {
+      bool CanExecute();
+
+      Task ExecuteAsync();
+  }
+	
+	public class AsyncCommand : IAsyncCommand
+  {
+      private readonly Func<bool> canExecute;
+
+      private readonly IErrorHandler errorHandler;
+
+      private readonly Func<Task> execute;
+
+      private bool isExecuting;
+
+      public event EventHandler CanExecuteChanged;
+
+      public AsyncCommand(
+          Func<Task> execute,
+          Func<bool> canExecute = null)
+      {
+          this.execute = execute;
+          this.canExecute = canExecute;
+          this.errorHandler = ErrorHandler.Create();
+      }
+
+      public bool CanExecute()
+      {
+          return !isExecuting && (canExecute?.Invoke() ?? true);
+      }
+
+      public async Task ExecuteAsync()
+      {
+          if (CanExecute())
+          {
+              try
+              {
+                  isExecuting = true;
+                  await execute();
+              }
+              finally
+              {
+                  isExecuting = false;
+              }
+          }
+
+          RaiseCanExecuteChanged();
+      }
+
+      public void RaiseCanExecuteChanged()
+      {
+          CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+      }
+
+      bool ICommand.CanExecute(object parameter)
+      {
+          return CanExecute();
+      }
+
+      void ICommand.Execute(object parameter)
+      {
+          ExecuteAsync().FireAndForgetSafety(errorHandler);
+      }
+  }
+    
+  public interface IAsyncCommand<T> : ICommand
+  {
+      bool CanExecute(T parameter);
+
+      Task ExecuteAsync(T parameter);
+  }
+	
+	public class AsyncCommand<T> : IAsyncCommand<T>
+  {
+      private readonly Func<T, bool> canExecute;
+
+      private readonly IErrorHandler errorHandler;
+
+      private readonly Func<T, Task> execute;
+
+      private bool isExecuting;
+
+      public event EventHandler CanExecuteChanged;
+
+      public AsyncCommand(Func<T, Task> execute, Func<T, bool> canExecute = null)
+      {
+          this.execute = execute;
+          this.canExecute = canExecute;
+          this.errorHandler = ErrorHandler.Create();
+      }
+
+      public bool CanExecute(T parameter)
+      {
+          return !isExecuting && (canExecute?.Invoke(parameter) ?? true);
+      }
+
+      public async Task ExecuteAsync(T parameter)
+      {
+          if (CanExecute(parameter))
+          {
+              try
+              {
+                  isExecuting = true;
+                  await execute(parameter);
+              }
+              finally
+              {
+                  isExecuting = false;
+              }
+          }
+
+          RaiseCanExecuteChanged();
+      }
+
+      public void RaiseCanExecuteChanged()
+      {
+          CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+      }
+
+      bool ICommand.CanExecute(object parameter)
+      {
+          return CanExecute((T)parameter);
+      }
+
+      void ICommand.Execute(object parameter)
+      {
+          ExecuteAsync((T)parameter).FireAndForgetSafety(errorHandler);
+      }
+  }
+	
+	
+	$end$]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Command classes</Title>
+      <Shortcut>Relay</Shortcut>
+      <Description>Inserts RelayCommand classes.</Description>
+      <Author>Niklas Hempel</Author>
+      <SnippetTypes>
+        <SnippetType>Expansion</SnippetType>
+      </SnippetTypes>
+    </Header>
+    <Snippet>
+      <Imports>
+        <Import>
+          <Namespace>System</Namespace>
+          <Namespace>System.Windows.Input</Namespace>
+        </Import>
+      </Imports>
+      <Code Language="csharp">
+        <![CDATA[
+	public class RelayCommand : ICommand
+	{
+		private readonly Predicate<object> canExecute;
+		
+		private readonly Action<object> execute;
+		
+		private event EventHandler CanExecuteChangedInternal;
+		
+		public event EventHandler CanExecuteChanged
+		{
+			add
+			{
+				CommandManager.RequerySuggested += value;
+				CanExecuteChangedInternal += value;
+			}
+			remove
+			{
+				CommandManager.RequerySuggested -= value;
+				CanExecuteChangedInternal -= value;
+			}
+		}
+		
+		public RelayCommand(Action<object> execute, Predicate<object> canExecute)
+		{
+			this.execute = execute ?? throw new NullReferenceException(nameof(execute));
+			this.canExecute = canExecute;
+		}
+
+		public RelayCommand(Action<object> execute)
+			: this(execute, null)
+		{
+		}
+		
+		public bool CanExecute(object parameter)
+		{
+			return canExecute == null || canExecute(parameter);
+		}
+		
+		public void Execute(object parameter)
+		{
+			execute(parameter);
+		}
+		
+		public void RaiseCanExecuteChanged()
+		{
+			CanExecuteChangedInternal.Raise(this);
+		}
+	}
+  
+	public class RelayCommand<T> : ICommand
+	{
+		private readonly Predicate<T> canExecute;
+
+		private readonly Action<T> execute;
+
+		public RelayCommand(Action<T> execute)
+				   : this(execute, null)
+		{
+			this.execute = execute;
+		}
+
+		public RelayCommand(Action<T> execute, Predicate<T> canExecute)
+		{
+			this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
+			this.canExecute = canExecute;
+		}
+
+		public event EventHandler CanExecuteChanged
+		{
+			add { CommandManager.RequerySuggested += value; }
+			remove { CommandManager.RequerySuggested -= value; }
+		}
+
+		public bool CanExecute(object parameter)
+		{
+			return canExecute == null || canExecute((T)parameter);
+		}
+
+		public void Execute(object parameter)
+		{
+			execute((T)parameter);
+		}
+	}
+	
+	public class EventArgs<T> : EventArgs
+	{
+		public EventArgs(T value)
+		{
+			Value = value;
+		}
+
+		public T Value { get; private set; }
+	}
+	
+	public static class EventHandlerExtensions
+    {
+        public static void Raise(this EventHandler handler, object sender)
+        {
+            handler?.Invoke(sender, EventArgs.Empty);
+        }
+
+        public static void Raise<T>(this EventHandler<EventArgs<T>> handler, object sender, T value)
+        {
+            handler?.Invoke(sender, new EventArgs<T>(value));
+        }
+
+        public static void Raise<T>(this EventHandler<T> handler, object sender, T value) where T : EventArgs
+        {
+            handler?.Invoke(sender, value);
+        }
+
+        public static void Raise<T>(this EventHandler<EventArgs<T>> handler, object sender, EventArgs<T> value)
+        {
+            handler?.Invoke(sender, value);
+        }
+    }
+	$end$]]>
+      </Code>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>
