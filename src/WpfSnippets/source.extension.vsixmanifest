@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="WpfSnippets.e53abfaf-e0c5-4c8d-8091-670493a8120e" Version="1.0" Language="en-US" Publisher="Niklas Hempel" />
+        <Identity Id="e53abfaf-e0c5-4c8d-8091-670493a8120e" Version="1.0" Language="en-US" Publisher="Niklas Hempel" />
         <DisplayName>Wpf Snippets</DisplayName>
         <Description xml:space="preserve">WPF snippets for base classes, properties notifiying the view and sync/async commands</Description>
         <MoreInfo>https://github.com/niklashempel/WpfSnippets</MoreInfo>
@@ -10,7 +10,12 @@
         <Tags>WPF, snippet, command, property, async</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />
+        <InstallationTarget Version="[16.0,18.0)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>x86</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[16.0,18.0)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
