@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+	<Extern href="stdidcmd.h" />
+	<Extern href="vsshlids.h" />
+	<Include href="KnownImageIds.vsct" />
+	<Include href="VSGlobals.vsct" />
+	<Commands package="WpfSnippets">
+		<Groups>
+			<Group guid="WpfSnippets" id="WpfSnippetsHelp" priority="0x0600">
+				<Parent guid="WpfSnippets" id="WpfSnippetsMenu" />
+			</Group>
+			<Group guid="WpfSnippets" id="WpfSnippetsSettings" priority="0x0700">
+				<Parent guid="WpfSnippets" id="WpfSnippetsMenu" />
+			</Group>
+		</Groups>
+
+		<Menus>
+			<Menu guid="WpfSnippets" id="WpfSnippetsMenu" priority="0x0250" type="Menu">
+				<Parent guid="VSMainMenu" id="Tools.OptionsGroup" />
+				<Strings>
+					<ButtonText>WPFFFFFFFF</ButtonText>
+				</Strings>
+			</Menu>
+		</Menus>
+
+		<!--This section defines the elements the user can interact with, like a menu command or a button
+        or combo box in a toolbar. -->
+		<Buttons>
+			<Button guid="WpfSnippets" id="FirstHelp" priority="0x0100" type="Button">
+				<Parent guid="WpfSnippets" id="WpfSnippetsHelp" />
+				<Icon guid="ImageCatalogGuid" id="Settings" />
+				<CommandFlag>IconIsMoniker</CommandFlag>
+				<Strings>
+					<ButtonText>Help</ButtonText>
+					<LocCanonicalName>.WpfSnippets.SendHelp</LocCanonicalName>
+				</Strings>
+			</Button>
+			<Button guid="WpfSnippets" id="WpfSnippetsOptions" priority="0x0100" type="Button">
+				<Parent guid="WpfSnippets" id="WpfSnippetsSettings" />
+				<Icon guid="ImageCatalogGuid" id="Settings" />
+				<CommandFlag>IconIsMoniker</CommandFlag>
+				<Strings>
+					<ButtonText>Help</ButtonText>
+					<LocCanonicalName>.WpfSnippets.OpenSetttings</LocCanonicalName>
+				</Strings>
+			</Button>
+		</Buttons>
+	</Commands>
+
+	<Symbols>
+		<GuidSymbol name="WpfSnippets" value="{04B953C9-8348-4AAA-9B37-C3F1964D9D1A}">
+			<IDSymbol name="WpfSnippetsMenu" value="0x0001" />
+			<IDSymbol name="WpfSnippetsSettings" value="0x0002" />
+			<IDSymbol name="WpfSnippetsHelp" value="0x0003" />
+			<IDSymbol name="WpfSnippetsOptions" value="0x0100" />
+			<IDSymbol name="FirstHelp" value="0x0101" />
+		</GuidSymbol>
+	</Symbols>
+</CommandTable>
