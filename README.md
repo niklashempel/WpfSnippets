@@ -2,6 +2,12 @@
 
 WPF Snippets is an extensions for Visual Studio 2022. It provides snippets that may be used in a WPF application.
 
+<h2>Links</h2>
+Download: <a title="Visual Studio Marketplace" href="https://marketplace.visualstudio.com/items?itemName=niklashempel.WpfSnippets" target="_blank">Visual Studio Marketplace</a> <br />
+Code, Issues: <a title="GitHub" href="https://github.com/niklashempel/WpfSnippets" target="_blank">GitHub</a> <br />
+
+<h2>Features</h2>
+
 The following snippets are added:
 
 - `base`: BaseViewModel class with implemented INotifyPropertyChanged interface
