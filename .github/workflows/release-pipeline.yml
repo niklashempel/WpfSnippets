@@ -18,6 +18,7 @@ jobs:
       SolutionPath: src\WpfSnippets.sln
       VsixManifestPath: src\WpfSnippets\source.extension.vsixmanifest
       VsixPath: src\WpfSnippets\bin\Release\WpfSnippets.vsix
+      PublisherToken: ${{ secrets.VS_PUBLISHER_ACCESS_TOKEN }}
 
     steps:
     - name: Checkout Code
@@ -80,4 +81,4 @@ jobs:
       with:
         extension-file: ${{ env.VsixPath }}
         publish-manifest-file: ${{ env.VsixPublishManifestPath }}
-        personal-access-code: ${{ secrets.VS_PUBLISHER_ACCESS_TOKEN }}      
+        personal-access-code: ${{ env.PublisherToken }}     
