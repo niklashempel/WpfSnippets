@@ -17,7 +17,7 @@ jobs:
       Configuration: Release
       SolutionPath: src\WpfSnippets.sln
       VsixManifestPath: src\WpfSnippets\source.extension.vsixmanifest
-      VsixPath: src\WpfSnippets\bin\Release\MappingGenerator.vsix
+      VsixPath: src\WpfSnippets\bin\Release\WpfSnippets.vsix
 
     steps:
     - name: Checkout Code
