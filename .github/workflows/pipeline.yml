@@ -17,9 +17,6 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@master
-      
-    - name: Setup MSBuild Path
-      uses: warrenbuckley/Setup-MSBuild@v1
     
     - name: Restore dependencies
       run: dotnet restore
