@@ -18,6 +18,7 @@ jobs:
       SolutionPath: src\WpfSnippets.sln
       VsixManifestPath: src\WpfSnippets\source.extension.vsixmanifest
       VsixPath: src\WpfSnippets\bin\Release\WpfSnippets.vsix
+      VsixPublishManifestPath: src\WpfSnippets\publishManifest.json
 
     steps:
     - name: Checkout Code
