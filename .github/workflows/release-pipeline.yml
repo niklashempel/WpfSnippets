@@ -47,10 +47,23 @@ jobs:
       env: 
         DeployExtension: False
     
-    - uses: fregante/release-with-changelog@v3
+    - name: Generate release note
+      run: |
+        git fetch --prune --unshallow
+        $commitLog = git log "$(git describe --tags --abbrev=0)..HEAD" --pretty=format:"- %s"
+        "What's new: `r`n`r`n$([string]::Join("`r`n",$commitLog))" | Out-File release_note.md -Encoding utf8
+        
+    - name: Create Github Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        tag: ${{ env.Version }}
+        tag_name: ${{ env.Version }}
+        release_name:  ${{ env.Version }}
+        body_path: release_note.md
+        draft: false
+        prerelease: false
         
     - name: Upload Release Asset - VSIX
       uses: actions/upload-release-asset@v1
