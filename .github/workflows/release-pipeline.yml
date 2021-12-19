@@ -49,7 +49,7 @@ jobs:
     
     - name: Generate release note
       run: |
-        git fetch --prune --unshallow
+        git fetch --prune --depth 100
         $commitLog = git log "$(git describe --tags --abbrev=0)..HEAD" --pretty=format:"- %s"
         "What's new: `r`n`r`n$([string]::Join("`r`n",$commitLog))" | Out-File release_note.md -Encoding utf8
         
@@ -72,7 +72,7 @@ jobs:
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ${{ env.VsixPath }}
-        asset_name: MappingGenerator.vsix
+        asset_name: WpfSnippets.vsix
         asset_content_type: binary/octet-stream
         
     - name: Upload Release Asset - Nuget
@@ -81,6 +81,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: src\MappingGenerator\bin\Release\MappingGenerator.${{ env.Version }}.nupkg
+        asset_path: src\WpfSnippets\bin\Release\WpfSnippets.${{ env.Version }}.nupkg
         asset_name: MappingGenerator.${{ env.Version }}.nupkg
         asset_content_type: binary/octet-stream
