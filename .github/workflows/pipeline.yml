@@ -23,7 +23,7 @@ jobs:
       
     - name: Build Solution
       run: |
-        msbuild.exe WpfSnippets.sln /nologo /nr:false /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:TargetFrameworkVersion=v4.7.2"
+        msbuild.exe WpfSnippets.sln /nologo /nr:false /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:TargetFrameworkVersion="v4.7.2"
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
