@@ -10,7 +10,6 @@ jobs:
   build:
 
     runs-on: windows-latest
-    environment: '357843048'
     env:
       DOTNET_NOLOGO: true
       RepositoryUrl: 'https://github.com/${{ github.repository }}'
@@ -19,7 +18,6 @@ jobs:
       SolutionPath: src\WpfSnippets.sln
       VsixManifestPath: src\WpfSnippets\source.extension.vsixmanifest
       VsixPath: src\WpfSnippets\bin\Release\WpfSnippets.vsix
-      PublisherToken: ${{ secrets.VS_PUBLISHER_ACCESS_TOKEN }}
 
     steps:
     - name: Checkout Code
@@ -82,4 +80,4 @@ jobs:
       with:
         extension-file: ${{ env.VsixPath }}
         publish-manifest-file: ${{ env.VsixPublishManifestPath }}
-        personal-access-code: ${{ env.PublisherToken }}     
+        personal-access-code: ${{ secrets.VS_PUBLISHER_ACCESS_TOKEN }}     
