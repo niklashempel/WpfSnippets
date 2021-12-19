@@ -1,6 +1,6 @@
 {
     "$schema": "http://json.schemastore.org/vsix-publish",
-    "categories": [ "tools", "vsix" ],
+    "categories": [ "coding", "visual studio extensions", "other" ],
     "identity": {
         "description": "WPF snippets for base classes, properties notifiying the view and sync/async commands.",
         "displayName": "WPF Snippets",
