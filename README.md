@@ -1,4 +1,5 @@
 # Wpf Snippets
+[![Release](https://github.com/niklashempel/WpfSnippets/actions/workflows/release-pipeline.yml/badge.svg?branch=main)](https://github.com/niklashempel/WpfSnippets/actions/workflows/release-pipeline.yml)  [![Marketplace](https://vsmarketplacebadge.apphb.com/version/niklashempel.WpfSnippets.svg)](https://marketplace.visualstudio.com/items?itemName=niklashempel.WpfSnippets)<br/>
 
 WPF Snippets is an extensions for Visual Studio 2022. It provides snippets that may be used in a WPF application.
 
