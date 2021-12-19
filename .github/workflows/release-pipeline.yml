@@ -10,7 +10,7 @@ jobs:
   build:
 
     runs-on: windows-latest
-    environment: environment
+    environment: '357843048'
     env:
       DOTNET_NOLOGO: true
       RepositoryUrl: 'https://github.com/${{ github.repository }}'
