@@ -10,20 +10,24 @@ jobs:
   build:
 
     runs-on: windows-latest
-    defaults:
-      run:
-        working-directory: ./src
+    env:
+      DOTNET_NOLOGO: true
+      RepositoryUrl: 'https://github.com/${{ github.repository }}'
+      Configuration: Release
+      SolutionPath: src\WpfSnippets.sln
+      VsixManifestPath: src\WpfSnippets\source.extension.vsixmanifest
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@master
-    
-    - name: Restore dependencies
-      run: dotnet restore
+             
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v1.0.2
       
-    - name: Build Solution
-      run: |
-        msbuild.exe WpfSnippets.sln /nologo /nr:false /p:DeleteExistingFiles=True /p:platform="Any CPU" /p:configuration="Release" /p:TargetFrameworkVersion="v4.7.2"
-
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Restore NuGet Packages
+      run: nuget restore $env:SolutionPath
+      
+    - name: Build extension
+      run: msbuild $env:SolutionPath /t:Rebuild
+      env: 
+        DeployExtension: False
