@@ -12,10 +12,7 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Navigate to Workspace
-      run: cd src
-      
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@master
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
