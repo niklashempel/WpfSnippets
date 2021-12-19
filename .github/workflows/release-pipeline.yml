@@ -75,12 +75,9 @@ jobs:
         asset_name: WpfSnippets.vsix
         asset_content_type: binary/octet-stream
         
-    - name: Upload Release Asset - Nuget
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Publish extension to Marketplace
+      uses: cezarypiatek/VsixPublisherAction@0.1
       with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: src\WpfSnippets\bin\Release\WpfSnippets.${{ env.Version }}.nupkg
-        asset_name: MappingGenerator.${{ env.Version }}.nupkg
-        asset_content_type: binary/octet-stream
+        extension-file: ${{ env.VsixPath }}
+        publish-manifest-file: ${{ env.VsixPublishManifestPath }}
+        personal-access-code: ${{ secrets.VS_PUBLISHER_ACCESS_TOKEN }}      
