@@ -12,15 +12,15 @@ Code, Issues: <a title="GitHub" href="https://github.com/niklashempel/WpfSnippet
 The following snippets are added:
 
 - `base`: BaseViewModel class with implemented INotifyPropertyChanged interface
-![base snippet](https://github.com/niklashempel/WpfSnippets/blob/docs/images/base.png)
+![base snippet](https://github.com/niklashempel/WpfSnippets/images/base.png)
 - `propn`: Property with a backing field. When the property setter gets called, the OnPropertyChanged method is called too.
-![propn snippet](https://github.com/niklashempel/WpfSnippets/blob/docs/images/propn.png)
+![propn snippet](https://github.com/niklashempel/WpfSnippets/images/propn.png)
 - `relay`: RelayCommand and AsyncCommand classes for synchronous/asynchronous command calls
 - `cmd`: RelayCommand that calls a method when invoked. No extra instantiation needed within the constrcutor.
-![cmd snippet](https://github.com/niklashempel/WpfSnippets/blob/docs/images/cmd.png)
+![cmd snippet](https://github.com/niklashempel/WpfSnippets/images/cmd.png)
 - `cmdo`: RelayCommand where a parameter can be passed. In XAML this is done via "CommandParameter=xxx"
-![cmdo snippet](https://github.com/niklashempel/WpfSnippets/blob/docs/images/cmdo.png)
+![cmdo snippet](https://github.com/niklashempel/WpfSnippets/images/cmdo.png)
 - `acmd`: Async command that calls an async method when invoked.
-![acmd snippet](https://github.com/niklashempel/WpfSnippets/blob/docs/images/acmd.png)
+![acmd snippet](https://github.com/niklashempel/WpfSnippets/images/acmd.png)
 - `acmdo`: Async command where a parameter can be passed.
-![acmdo snippet](https://github.com/niklashempel/WpfSnippets/blob/docs/images/acmdo.png)
+![acmdo snippet](https://github.com/niklashempel/WpfSnippets/images/acmdo.png)
